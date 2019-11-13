@@ -22,10 +22,8 @@ public class VotesCalculator implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        try(KafkaStreams kafkaStreams = new KafkaStreams(topology(args), configuration(args))){
-            logger.info("Starting kafka stream processing");
-            kafkaStreams.start();
-        }
+        logger.info("Starting kafka stream processing");
+        new KafkaStreams(topology(args), configuration(args)).start();
     }
 
     private Properties configuration(String... args){
@@ -35,6 +33,8 @@ public class VotesCalculator implements CommandLineRunner {
         configuration.put(StreamsConfig.APPLICATION_ID_CONFIG, args[0]);
         configuration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, args[1]);
         configuration.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE); //Exactly once semantics
+        configuration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
+        configuration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         return configuration;
     }
 
