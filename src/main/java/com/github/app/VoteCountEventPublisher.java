@@ -4,30 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.util.List;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 public class VoteCountEventPublisher {
     private static final Logger LOGGER = LoggerFactory.getLogger(VoteCountEventPublisher.class);
-    private final List<SseEmitter> subscribers;
     private final ObjectMapper objectMapper;
+    private final TextWebSocketHandler voteCountWebSocketHandler;
 
-    public VoteCountEventPublisher(List<SseEmitter> subscribers, ObjectMapper objectMapper) {
-        this.subscribers = subscribers;
+    public VoteCountEventPublisher(ObjectMapper objectMapper, TextWebSocketHandler voteCountWebSocketHandler) {
         this.objectMapper = objectMapper;
+        this.voteCountWebSocketHandler = voteCountWebSocketHandler;
     }
 
     public void publishEvent(final Candidate candidate){
         LOGGER.info("Received publish event for candidate {}", candidate.getName());
-        subscribers.forEach(subscriber ->{
-            try{
-                subscriber.send(SseEmitter.event().name("votes").data(objectMapper.writeValueAsString(candidate)));
-            }catch(Exception ex){
-                LOGGER.error("Cannot send event for candidate {} for subscriber {}. Here is the exception message {}."
-                        , candidate.getName(), subscriber, ex.getMessage());
-            }
-        });
+        try{
+            voteCountWebSocketHandler.handleMessage(null, new TextMessage(objectMapper.writeValueAsBytes(candidate)));
+        }catch(Exception ex){
+            LOGGER.error("Cannot publish votes of candidate {}, Here is the exception : {}", candidate.getName(), ex.getMessage());
+        }
     }
 }

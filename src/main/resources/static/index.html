@@ -7,14 +7,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
-<body>
-    <br><br><br><br><br><br>
-    <div align="center">
-        <div class="container">
-            <h1>Player 1 <span class="label label-primary">21</span></h1>
-            <h1>Player 2 <span class="label label-success">55</span></h1>
-            <h1>Player 3 <span class="label label-danger">70</span></h1>
-        </div>
+<body onload="createWebSockets()">
+<br><br><br><br><br><br>
+<div align="center">
+    <div class="container">
+        <h1>Candidate 1 <span id = "candidate1Votes" class="label label-primary">0</span></h1>
+        <h1>Candidate 2 <span id= "candidate2Votes"  class="label label-success">0</span></h1>
+        <h1>Candidate 3 <span id = "candidate3Votes"  class="label label-danger">0</span></h1>
     </div>
+</div>
 </body>
+<script>
+    function createWebSockets(){
+      console.log('creating web sockets');
+      var webSocket = new WebSocket("ws://localhost:8080/vote-count");
+      console.log('web socket created successfully');
+      webSocket.onmessage = function(event){
+        console.log('Received event '+event.data);
+      var candidate = JSON.parse(event.data);
+      if(candidate.name === 'candidate1'){
+          updateCandidateVotes('candidate1Votes', candidate.totalVotes);
+      }else if(candidate.name === 'candidate2'){
+          updateCandidateVotes('candidate2Votes', candidate.totalVotes);
+      }else if(candidate.name === 'candidate3'){
+          updateCandidateVotes('candidate3Votes', candidate.totalVotes);
+      }else{
+          console.log('Invalid candidate.');
+      }
+    } ;
+  }
+  function updateCandidateVotes(candidateVoteCountElId, totalVotes){
+        document.getElementById(candidateVoteCountElId).innerHTML = totalVotes;
+    }
+</script>
 </html>
