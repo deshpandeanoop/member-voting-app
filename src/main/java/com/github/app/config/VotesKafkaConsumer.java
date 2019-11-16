@@ -1,5 +1,6 @@
-package com.github.app;
+package com.github.app.config;
 
+import com.github.app.CastVoteTask;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
