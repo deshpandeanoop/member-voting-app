@@ -1,6 +1,7 @@
 package com.github.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.app.model.Candidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -8,12 +9,12 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
-public class VoteCountEventPublisher {
-    private static final Logger LOGGER = LoggerFactory.getLogger(VoteCountEventPublisher.class);
+public class VoteCountPublisher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoteCountPublisher.class);
     private final ObjectMapper objectMapper;
     private final TextWebSocketHandler voteCountWebSocketHandler;
 
-    public VoteCountEventPublisher(ObjectMapper objectMapper, TextWebSocketHandler voteCountWebSocketHandler) {
+    public VoteCountPublisher(ObjectMapper objectMapper, TextWebSocketHandler voteCountWebSocketHandler) {
         this.objectMapper = objectMapper;
         this.voteCountWebSocketHandler = voteCountWebSocketHandler;
     }

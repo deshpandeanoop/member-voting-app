@@ -1,5 +1,6 @@
 package com.github.app;
 
+import com.github.app.model.Candidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final VotesCalculator votesCalculator;
-    private final VoteCountEventPublisher voteCountEventPublisher;
+    private final VoteCountPublisher voteCountEventPublisher;
 
-    public Controller(VotesCalculator votesCalculator, VoteCountEventPublisher voteCountEventPublisher) {
+    public Controller(VotesCalculator votesCalculator, VoteCountPublisher voteCountEventPublisher) {
         this.votesCalculator = votesCalculator;
         this.voteCountEventPublisher = voteCountEventPublisher;
     }

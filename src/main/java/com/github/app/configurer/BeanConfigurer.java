@@ -1,4 +1,4 @@
-package com.github.app.config;
+package com.github.app.configurer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

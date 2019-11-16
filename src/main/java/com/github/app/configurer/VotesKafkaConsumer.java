@@ -1,4 +1,4 @@
-package com.github.app.config;
+package com.github.app.configurer;
 
 import com.github.app.CastVoteTask;
 import org.apache.kafka.common.serialization.Serdes;
@@ -43,7 +43,7 @@ public class VotesKafkaConsumer implements CommandLineRunner {
         logger.info("Building topology for votes counting");
         logger.info("Received command line arguments, {}", args.length);
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        KStream<Long, String> votesStream = streamsBuilder.stream("gs-votes", Consumed.with(Serdes.Long(), Serdes.String()));
+        KStream<Long, String> votesStream = streamsBuilder.stream(args[2], Consumed.with(Serdes.Long(), Serdes.String()));
         votesStream.foreach(votesCalculateTask);
         return streamsBuilder.build();
     }

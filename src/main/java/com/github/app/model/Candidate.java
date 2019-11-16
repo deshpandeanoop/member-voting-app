@@ -1,4 +1,4 @@
-package com.github.app;
+package com.github.app.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -1,6 +1,7 @@
 package com.github.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.app.model.Candidate;
 import org.apache.kafka.streams.kstream.ForeachAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -24,6 +24,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         LOGGER.info("Registering web socket handler");
         webSocketHandlerRegistry.addHandler(voteCountWebSocketHandler, "/vote-count")
-                .setAllowedOrigins("*").setHandshakeHandler(new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy()));
+                .setAllowedOrigins("*")
+                .setHandshakeHandler(new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy()))
+                .withSockJS();
     }
 }
