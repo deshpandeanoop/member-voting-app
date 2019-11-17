@@ -1,5 +1,6 @@
 package com.github.app.kafka;
 
+import com.github.app.model.KafkaConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -17,32 +18,35 @@ import java.util.Properties;
 
 @Component
 public class VotesKafkaConsumer implements CommandLineRunner {
-    private static final Logger logger = LoggerFactory.getLogger(VotesKafkaConsumer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VotesKafkaConsumer.class);
     private VotesProcessor votesCalculateTask;
+    private final KafkaConfig config;
+
+    public VotesKafkaConsumer(KafkaConfig config) {
+        this.config = config;
+    }
 
     @Override
     public void run(String... args) throws Exception {
-        logger.info("Starting kafka stream processing");
-        new KafkaStreams(topology(args), configuration(args)).start();
+        LOGGER.info("Starting kafka stream processing");
+        new KafkaStreams(topology(), configuration()).start();
     }
 
-    private Properties configuration(String... args){
-        logger.info("Building configuration properties for kafka stream processing");
-        logger.debug("Received command line arguments, {}", args);
+    private Properties configuration(){
+        LOGGER.info("Building configuration properties for kafka stream processing");
         Properties configuration = new Properties();
-        configuration.put(StreamsConfig.APPLICATION_ID_CONFIG, args[0]);
-        configuration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, args[1]);
+        configuration.put(StreamsConfig.APPLICATION_ID_CONFIG, config.getApplicationId());
+        configuration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootStrapServers());
         configuration.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE); //Exactly once semantics
         configuration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
         configuration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         return configuration;
     }
 
-    private Topology topology(String... args){
-        logger.info("Building topology for votes counting");
-        logger.info("Received command line arguments, {}", args.length);
+    private Topology topology(){
+        LOGGER.info("Building topology for votes counting");
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        KStream<Long, String> votesStream = streamsBuilder.stream(args[2], Consumed.with(Serdes.Long(), Serdes.String()));
+        KStream<Long, String> votesStream = streamsBuilder.stream(config.getTopic(), Consumed.with(Serdes.Long(), Serdes.String()));
         votesStream.foreach(votesCalculateTask);
         return streamsBuilder.build();
     }
