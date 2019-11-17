@@ -1,4 +1,4 @@
-package com.github.app;
+package com.github.app.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.app.model.Candidate;

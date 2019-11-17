@@ -13,7 +13,7 @@ public class VotesCalculator {
     private static final Logger logger = LoggerFactory.getLogger(VotesCalculator.class);
     private final Map<String, Long> votesCounterMap = new HashMap<>();
 
-    public Long castVote(Candidate candidate){
+    public Long castVoteAndGetTotalVotes(Candidate candidate){
         logger.info("Adding votes {} for candidate {}", candidate.getVotes(), candidate.getName());
         if(! votesCounterMap.containsKey(candidate.getName())){
             votesCounterMap.put(candidate.getName(), 0L);

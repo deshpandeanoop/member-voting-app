@@ -1,6 +1,5 @@
-package com.github.app.configurer;
+package com.github.app.kafka;
 
-import com.github.app.CastVoteTask;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -19,7 +18,7 @@ import java.util.Properties;
 @Component
 public class VotesKafkaConsumer implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(VotesKafkaConsumer.class);
-    private CastVoteTask votesCalculateTask;
+    private VotesProcessor votesCalculateTask;
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,7 +48,7 @@ public class VotesKafkaConsumer implements CommandLineRunner {
     }
 
     @Autowired
-    public void setVotesCalculateTask(CastVoteTask votesCalculateTask) {
+    public void setVotesCalculateTask(VotesProcessor votesCalculateTask) {
         this.votesCalculateTask = votesCalculateTask;
     }
 }
