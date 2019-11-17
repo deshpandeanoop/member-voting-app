@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
-<body onload="createWebSockets()">
+<body onload="getCandidateVotes(); createWebSockets()">
 <br><br><br><br><br><br>
 <div align="center">
     <div class="container">
@@ -18,6 +18,34 @@
 </div>
 </body>
 <script>
+
+    function getCandidateVotes(){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange=function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var candidates = JSON.parse(this.responseText).candidates;
+          console.log('Received '+candidates.length);
+          for(var i = 0 ; i < candidates.length ; ++i){
+            if(candidates[i].name === 'candidate1'){
+                console.log('Updating candidate1 votes');
+                updateCandidateVotes('candidate1Votes', candidates[i].totalVotes);
+            }else if (candidates[i].name === 'candidate2'){
+                console.log('Updating candidate2 votes');
+                updateCandidateVotes('candidate2Votes', candidates[i].totalVotes);
+            }else if(candidates[i].name === 'candidate3'){
+                console.log('Updating candidate3 votes');
+                updateCandidateVotes('candidate3Votes', candidates[i].totalVotes);
+            }else{
+              console.log('Invalid candidate Received '+candidates[i].name);
+              console.log('Skipping and going ahead');
+            }
+          }
+        }
+      };
+      xhttp.open("GET", "http://localhost:8080/votes", true);
+      xhttp.send();
+    }
+
     function createWebSockets(){
       console.log('creating web sockets');
       var webSocket = new WebSocket("ws://localhost:8080/vote-count");

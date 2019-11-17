@@ -1,6 +1,7 @@
 package com.github.app.kafka;
 
 import com.github.app.model.KafkaConfig;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -37,7 +38,6 @@ public class VotesKafkaConsumer implements CommandLineRunner {
         Properties configuration = new Properties();
         configuration.put(StreamsConfig.APPLICATION_ID_CONFIG, config.getApplicationId());
         configuration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootStrapServers());
-        configuration.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE); //Exactly once semantics
         configuration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
         configuration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         return configuration;

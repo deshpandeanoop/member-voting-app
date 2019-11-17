@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -22,5 +24,16 @@ public class VotesCalculator {
         totalVotes = totalVotes + candidate.getVotes();
         votesCounterMap.put(candidate.getName(), totalVotes);
         return totalVotes;
+    }
+
+    public List<Candidate> getTotalVotes(){
+        List<Candidate> candidates = new ArrayList<>();
+        votesCounterMap.entrySet().forEach(entry ->{
+            Candidate candidate = new Candidate();
+            candidate.setName(entry.getKey());
+            candidate.setTotalVotes(entry.getValue());
+            candidates.add(candidate);
+        });
+        return candidates;
     }
 }
